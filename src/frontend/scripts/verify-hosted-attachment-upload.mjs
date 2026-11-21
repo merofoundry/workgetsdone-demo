@@ -1,0 +1,51 @@
+import './stage-guard.mjs';
+import { chromium } from '@playwright/test';
+import { readFileSync, appendFileSync, writeFileSync, mkdirSync } from 'node:fs';
+const root = new URL('../../', import.meta.url);
+const evidence = new URL('verification/2026-10-11-full-build/', root);
+const base = process.env.WGD_BASE || 'https://workgetsdone.staging.merofoundry.app';
+const checks = [];
+const check = (name, passed, detail) => { checks.push({ name, passed: !!passed, evidence: detail }); console.log(`${passed ? 'PASS' : 'FAIL'} ${name}: ${JSON.stringify(detail)}`); if (!passed) throw new Error(name); };
+const passwordFor = name => { const line = readFileSync(new URL(`.env-${name}`, root), 'utf8').split('\n').find(l => l.startsWith(`${name.toUpperCase()}_PASSWORD=`)); return line.slice(line.indexOf('=') + 1).replace(/^['"]|['"]$/g, '').trim(); };
+mkdirSync(evidence, { recursive: true });
+const registry = JSON.parse(readFileSync(new URL('frontend/public/services.json', root), 'utf8')).services;
+const browser = await chromium.launch({ headless: true });
+let failure, projectId;
+try {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage(); const errors = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(base + '/sign-in', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: 'Sign in to your work' }).waitFor();
+  await page.getByLabel('Email', { exact: true }).fill('bob@workgetsdone.test');
+  await page.getByLabel('Password', { exact: true }).fill(passwordFor('bob'));
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: /^Account:/ }).waitFor();
+  check('bob: signed in', true, { path: new URL(page.url()).pathname });
+  const post = async (name, input) => { const r = await context.request.post(`${base}/api/v1/services/${registry[name]}/inbound`, { data: input, headers: { 'X-Requested-With': 'XMLHttpRequest' } }); return { status: r.status(), body: await r.json().catch(() => null) }; };
+  const stamp = new Date().toISOString();
+  const project = await post('projects.create', { name: `WGD-MATRIX hosted attachment ${stamp}`, description: 'hosted check', status: 'STARTED', clientRef: crypto.randomUUID() });
+  projectId = project.body?.data?.id; check('fixture project created', project.status === 200 && projectId, project.body);
+  const note = await post('notes.create', { title: `WGD-MATRIX hosted attachment note ${stamp}`, projectId, clientRef: crypto.randomUUID() });
+  const noteId = note.body?.data?.id; check('fixture note created', note.status === 200 && noteId, note.body);
+  await page.goto(base + '/notes/' + noteId);
+  const panel = page.getByRole('region', { name: 'Attachments' });
+  await panel.getByText('No attachments yet.').waitFor({ timeout: 60000 });
+  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), panel.getByRole('button', { name: 'Add attachment' }).click()]);
+  await chooser.setFiles({ name: 'hello.txt', mimeType: 'text/plain', buffer: Buffer.from('abc') });
+  const link = panel.getByRole('link', { name: 'hello.txt' }); await link.waitFor({ timeout: 60000 });
+  check('the uploaded file is listed on the note', true, { text: (await panel.innerText()).replace(/\s+/g, ' ') });
+  await page.screenshot({ path: new URL('hosted-attachment-upload-bob.png', evidence).pathname, fullPage: true });
+  await link.click(); await page.waitForURL(url => /^\/files\/[0-9a-f-]+$/.test(url.pathname), { timeout: 30000 });
+  await page.locator('.page-header').getByRole('heading', { name: 'hello.txt', exact: true }).waitFor();
+  const text = (await page.locator('main, .page').first().innerText()).replace(/\s+/g, ' ');
+  check('the attachment page shows type text/plain and a size', text.includes('text/plain') && /3 bytes/.test(text), { text: text.slice(0, 300) });
+  check('no script errors', errors.length === 0, { errors });
+  const purge = await post('projects.deleteChildren', { id: projectId, strategy: 'cascade' }); await post('projects.delete', { id: projectId, strategy: 'cascade' }); void purge;
+  await context.close();
+} catch (error) { failure = error.message; console.error(failure); }
+finally {
+  await browser.close();
+  writeFileSync(new URL('hosted-attachment-upload-results.json', evidence), JSON.stringify({ at: new Date().toISOString(), base, checks, failure: failure || null }, null, 2));
+  appendFileSync(new URL('BUILD_LOG.md', root), `\n\n### ${new Date().toISOString()} — Hosted attachment upload browser verification (Task 20)\n\n${checks.filter(item => item.passed).length}/${checks.length} checks passed. Evidence: verification/2026-10-11-full-build/hosted-attachment-upload-results.json.${failure ? ' FAILED: ' + failure : ''}\n`);
+}
+if (failure) process.exit(1);

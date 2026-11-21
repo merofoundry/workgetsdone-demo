@@ -1,0 +1,1521 @@
+{
+ "app_users_active": {
+  "ast": {
+   "fromAlias": "app_user",
+   "fromModel": "app_user",
+   "joins": [],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "display_name",
+      "modelAlias": "app_user"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "app_user"
+    },
+    {
+     "fieldName": "display_name",
+     "modelAlias": "app_user"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "is_active",
+       "modelAlias": "app_user"
+      },
+      "operator": "=",
+      "value": "true"
+     },
+     {
+      "field": {
+       "fieldName": "key",
+       "modelAlias": "app_user"
+      },
+      "operator": "is_not_null"
+     }
+    ]
+   }
+  },
+  "id": "e643263d-8f6b-4ed7-9d5b-62dc7cd58e24"
+ },
+ "grants_for_calls": {
+  "ast": {
+   "fromAlias": "call",
+   "fromModel": "call",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "call"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "call"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "call"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "call"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "call"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "4cd8ee85-09a9-4dab-86a6-183909f342c9"
+ },
+ "grants_for_companies": {
+  "ast": {
+   "fromAlias": "company",
+   "fromModel": "company",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "company"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "company"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "company"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "company"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "company"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "9f46edc3-4427-4a54-af8b-ac5b62e8821b"
+ },
+ "grants_for_contact_companies": {
+  "ast": {
+   "fromAlias": "contact_company",
+   "fromModel": "contact_company",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "contact_company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_company_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "contact_company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_company_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "contact_company"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_company_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "contact_company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_company_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "contact_company_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_company_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "contact_company"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "contact_company"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "contact_company"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "contact_company"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "e934db0a-a356-423e-9af9-ece1eec3f5ac"
+ },
+ "grants_for_contacts": {
+  "ast": {
+   "fromAlias": "contact",
+   "fromModel": "contact",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "contact"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "contact"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "contact"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "contact"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "contact"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "49f36741-4dfa-4754-907e-a1ec99f92fdb"
+ },
+ "grants_for_note_files": {
+  "ast": {
+   "fromAlias": "note_file",
+   "fromModel": "note_file",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "note_file_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_file_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "note_file_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_file_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "note_file"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_file_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "note_file_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_file_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "note_file_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_file_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note_file"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "note_file"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "note_file"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "note_file"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "a721497f-180e-4dc3-a6c2-6be429916596"
+ },
+ "grants_for_notes": {
+  "ast": {
+   "fromAlias": "note",
+   "fromModel": "note",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "note"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "note"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "note"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "note"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "ab599124-9f1e-4d8d-8546-1b3ce599ee52"
+ },
+ "grants_for_projects": {
+  "ast": {
+   "fromAlias": "project",
+   "fromModel": "project",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "project"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "project"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "project"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "project"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "project"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "663417fd-f221-4432-a143-e009c1365d8f"
+ },
+ "grants_for_tasks": {
+  "ast": {
+   "fromAlias": "task",
+   "fromModel": "task",
+   "joins": [
+    {
+     "alias": "dp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions",
+     "type": "left"
+    },
+    {
+     "alias": "g",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "g"
+        },
+        "right": {
+         "fieldName": "key",
+         "modelAlias": "task"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions",
+     "type": "inner"
+    },
+    {
+     "alias": "rv_g",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "g"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_g"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "g"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked",
+     "type": "left"
+    }
+   ],
+   "orderBy": [
+    {
+     "direction": "asc",
+     "field": {
+      "fieldName": "granted_at",
+      "modelAlias": "g"
+     }
+    }
+   ],
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "task"
+    },
+    {
+     "fieldName": "user_id",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "source",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "access_label",
+     "modelAlias": "g"
+    },
+    {
+     "fieldName": "granted_at",
+     "modelAlias": "g"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "rv_g"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "fieldName": "source",
+       "modelAlias": "g"
+      },
+      "operator": "!=",
+      "value": "creator"
+     },
+     {
+      "field": {
+       "fieldName": "deleted_at",
+       "modelAlias": "task"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "task"
+        },
+        "operator": "is_null"
+       },
+       {
+        "field": {
+         "fieldName": "mark_deleted",
+         "modelAlias": "task"
+        },
+        "operator": "!=",
+        "value": "true"
+       }
+      ]
+     },
+     {
+      "field": {
+       "fieldName": "user_id",
+       "modelAlias": "dp"
+      },
+      "operator": "is_not_null"
+     },
+     {
+      "field": {
+       "fieldName": "can_share",
+       "modelAlias": "dp"
+      },
+      "operator": "=",
+      "value": "true"
+     }
+    ]
+   }
+  },
+  "id": "5430f91b-59c5-4a53-963e-1057fce8e788"
+ },
+ "share_check_call": {
+  "id": "93ade71b-caa0-4169-b567-b54a5f4962f1"
+ },
+ "share_check_company": {
+  "id": "3209a416-cc68-45a3-a9a2-fbff058d68af"
+ },
+ "share_check_contact": {
+  "id": "f62b4131-3768-4c93-b6a4-88a90e8ade37"
+ },
+ "share_check_contact_company": {
+  "id": "e0749e31-8e6e-4ba2-8f6f-f001bf08b755"
+ },
+ "share_check_note": {
+  "id": "3a0e59a5-154e-41be-b756-40205d1a71b9"
+ },
+ "share_check_note_file": {
+  "id": "e0be34e4-3a51-4e3e-a725-b33f8b54459c"
+ },
+ "share_check_project": {
+  "id": "1c01dbc2-6b60-4d07-a5ab-84e95c5fc423"
+ },
+ "share_check_task": {
+  "id": "be3e19cd-f83f-4141-8107-11b634e055ce"
+ }
+}

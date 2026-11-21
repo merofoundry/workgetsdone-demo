@@ -1,0 +1,60 @@
+import './stage-guard.mjs';
+import { chromium } from '@playwright/test';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// Hosted check of the Task 24 shell as bob: one login; desktop, mobile (sidebar closed and open) and dark mode screenshots.
+const root = new URL('../../', import.meta.url);
+const evidence = new URL('verification/2026-10-11-full-build/', root);
+const base = process.env.WGD_BASE;
+mkdirSync(evidence, { recursive: true });
+const checks = [];
+const check = (name, passed, detail) => { checks.push({ name, passed: !!passed, evidence: detail }); console.log(`${passed ? 'PASS' : 'FAIL'} ${name}: ${JSON.stringify(detail)}`); };
+const line = readFileSync(new URL('.env-bob', root), 'utf8').split('\n').find(l => l.startsWith('BOB_PASSWORD='));
+const password = line.slice(line.indexOf('=') + 1).replace(/^['"]|['"]$/g, '').trim();
+const browser = await chromium.launch({ headless: true });
+try {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push('pageerror: ' + error.message));
+  page.on('console', message => { if (message.type() === 'error') errors.push('console: ' + message.text()); });
+  await page.addInitScript(() => { window.wgdCsp = []; document.addEventListener('securitypolicyviolation', event => window.wgdCsp.push(event.violatedDirective)); });
+  await page.goto(base + '/sign-in', { waitUntil: 'domcontentloaded' });
+  await page.getByLabel('Email', { exact: true }).fill('bob@workgetsdone.test');
+  await page.getByLabel('Password', { exact: true }).fill(password);
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: /^Account:/ }).waitFor();
+  const settle = async () => { await page.waitForLoadState('networkidle').catch(() => {}); await page.waitForTimeout(400); };
+  await settle();
+  const nav = page.getByRole('navigation', { name: 'Main' });
+  check('desktop: seven sidebar links', (await nav.getByRole('link').count()) === 7, {});
+  await page.screenshot({ path: new URL('shell-bob-desktop.png', evidence).pathname });
+  await page.getByRole('button', { name: /^Account:/ }).click();
+  check('desktop: account menu has Change password, Users (bob is an administrator) and Sign out', (await page.getByRole('link', { name: 'Change password' }).count()) === 1 && (await page.getByRole('link', { name: 'Users' }).count()) === 1 && (await page.getByRole('button', { name: 'Sign out', exact: true }).count()) === 1, {});
+  await page.screenshot({ path: new URL('shell-bob-account-menu.png', evidence).pathname });
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Toggle dark mode' }).click();
+  check('dark mode flips html.dark', await page.evaluate(() => document.documentElement.classList.contains('dark')), {});
+  await settle();
+  await page.screenshot({ path: new URL('shell-bob-dark.png', evidence).pathname });
+  await page.getByRole('button', { name: 'Toggle dark mode' }).click();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await settle();
+  check('mobile: sidebar closed', await nav.getByRole('link', { name: 'Tasks', exact: true }).waitFor({ state: 'hidden', timeout: 5000 }).then(() => true, () => false), {});
+  check('mobile: page fits 375px', await page.evaluate(() => document.documentElement.scrollWidth <= 375), {});
+  await page.screenshot({ path: new URL('shell-bob-mobile.png', evidence).pathname });
+  await page.getByRole('button', { name: 'Toggle sidebar' }).click();
+  const tasks = nav.getByRole('link', { name: 'Tasks', exact: true });
+  const reached = state => tasks.waitFor({ state, timeout: 5000 }).then(() => true, () => false);
+  check('mobile: hamburger opens the sidebar', await reached('visible'), {});
+  await page.waitForTimeout(500); // let the slide-in finish before the screenshot
+  await page.screenshot({ path: new URL('shell-bob-mobile-open.png', evidence).pathname });
+  await page.getByTestId('sidebar-backdrop').click({ position: { x: 350, y: 400 } });
+  check('mobile: backdrop closes the sidebar', await reached('hidden'), {});
+  const csp = await page.evaluate(() => window.wgdCsp);
+  check('zero console errors and CSP violations', errors.length === 0 && csp.length === 0, { errors, csp });
+  await context.close();
+} finally {
+  await browser.close();
+  writeFileSync(new URL('hosted-shell-task24-results.json', evidence), JSON.stringify({ at: new Date().toISOString(), base, checks }, null, 2) + '\n');
+}
+if (checks.some(c => !c.passed)) process.exit(1);

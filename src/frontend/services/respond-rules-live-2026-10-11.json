@@ -1,0 +1,430 @@
+{
+ "projects.read": {
+  "id": "50614511-ec60-4e0e-93ed-cdfdc6520bff",
+  "name": "byof projects.read.respond",
+  "trigger": "webhook_received",
+  "phase": "response",
+  "condition": {
+   "and": [
+    {
+     "==": [
+      {
+       "var": "webhook.name"
+      },
+      "projects.read"
+     ]
+    },
+    {
+     "==": [
+      {
+       "var": "actor.type"
+      },
+      "user"
+     ]
+    },
+    {
+     "or": [
+      {
+       "!": {
+        "var": "after.valid"
+       }
+      },
+      {
+       "var": "after.gatePassed"
+      }
+     ]
+    }
+   ]
+  },
+  "actions": [
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": 503
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": {
+       "error": {
+        "message": "This information could not be loaded. Please try again."
+       }
+      }
+     }
+    ]
+   },
+   {
+    "type": "run_function",
+    "params": {
+     "name": "projects.read",
+     "expected": [
+      {
+       "key": "project",
+       "count": false
+      },
+      {
+       "key": "companies",
+       "count": false
+      },
+      {
+       "key": "contacts",
+       "count": false
+      },
+      {
+       "key": "projects",
+       "count": false
+      },
+      {
+       "key": "openTasks",
+       "count": true
+      },
+      {
+       "key": "overdue",
+       "count": true
+      },
+      {
+       "key": "openCalls",
+       "count": true
+      },
+      {
+       "key": "notes",
+       "count": true
+      },
+      {
+       "key": "files",
+       "count": true
+      },
+      {
+       "key": "unbilledCalls",
+       "count": true
+      },
+      {
+       "key": "projectWritable",
+       "count": true
+      }
+     ],
+     "function_id": "387414ee-253f-4568-a084-d81df2c815b3"
+    }
+   },
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": "{{after.resultStatus}}"
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": "{{after.result}}"
+     }
+    ]
+   }
+  ],
+  "priority": 0,
+  "run_as": "actor",
+  "isActive": true,
+  "scope": {
+   "service_config_id": "b1a53edb-cb90-42b3-bddc-003fe2ee9d6c"
+  },
+  "settings": {}
+ },
+ "tasks.read": {
+  "id": "1489fe28-6223-43fe-a80a-70c395b30ff0",
+  "name": "byof tasks.read.respond",
+  "trigger": "webhook_received",
+  "phase": "response",
+  "condition": {
+   "and": [
+    {
+     "==": [
+      {
+       "var": "webhook.name"
+      },
+      "tasks.read"
+     ]
+    },
+    {
+     "==": [
+      {
+       "var": "actor.type"
+      },
+      "user"
+     ]
+    }
+   ]
+  },
+  "actions": [
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": 503
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": {
+       "error": {
+        "message": "This information could not be loaded. Please try again."
+       }
+      }
+     }
+    ]
+   },
+   {
+    "type": "run_function",
+    "params": {
+     "name": "tasks.read",
+     "expected": [
+      {
+       "key": "tasks",
+       "count": false
+      },
+      {
+       "key": "companies",
+       "count": false
+      },
+      {
+       "key": "contacts",
+       "count": false
+      },
+      {
+       "key": "projects",
+       "count": false
+      },
+      {
+       "key": "taskWritable",
+       "count": false
+      }
+     ],
+     "function_id": "387414ee-253f-4568-a084-d81df2c815b3"
+    }
+   },
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": "{{after.resultStatus}}"
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": "{{after.result}}"
+     }
+    ]
+   }
+  ],
+  "priority": 0,
+  "run_as": "actor",
+  "isActive": true,
+  "scope": {
+   "service_config_id": "74e5d655-3320-4296-a1b0-634d96a108ce"
+  },
+  "settings": {}
+ },
+ "calls.read": {
+  "id": "e338125a-1add-475e-9330-2954988e3b42",
+  "name": "byof calls.read.respond",
+  "trigger": "webhook_received",
+  "phase": "response",
+  "condition": {
+   "and": [
+    {
+     "==": [
+      {
+       "var": "webhook.name"
+      },
+      "calls.read"
+     ]
+    },
+    {
+     "==": [
+      {
+       "var": "actor.type"
+      },
+      "user"
+     ]
+    }
+   ]
+  },
+  "actions": [
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": 503
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": {
+       "error": {
+        "message": "This information could not be loaded. Please try again."
+       }
+      }
+     }
+    ]
+   },
+   {
+    "type": "run_function",
+    "params": {
+     "name": "calls.read",
+     "expected": [
+      {
+       "key": "calls",
+       "count": false
+      },
+      {
+       "key": "companies",
+       "count": false
+      },
+      {
+       "key": "contacts",
+       "count": false
+      },
+      {
+       "key": "projects",
+       "count": false
+      },
+      {
+       "key": "callWritable",
+       "count": false
+      }
+     ],
+     "function_id": "387414ee-253f-4568-a084-d81df2c815b3"
+    }
+   },
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": "{{after.resultStatus}}"
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": "{{after.result}}"
+     }
+    ]
+   }
+  ],
+  "priority": 0,
+  "run_as": "actor",
+  "isActive": true,
+  "scope": {
+   "service_config_id": "34dd3526-ce25-4905-816b-ca3109dc4f9d"
+  },
+  "settings": {}
+ },
+ "notes.read": {
+  "id": "8d7bad90-7061-4127-a723-7df4e88523c6",
+  "name": "byof notes.read.respond",
+  "trigger": "webhook_received",
+  "phase": "response",
+  "condition": {
+   "and": [
+    {
+     "==": [
+      {
+       "var": "webhook.name"
+      },
+      "notes.read"
+     ]
+    },
+    {
+     "==": [
+      {
+       "var": "actor.type"
+      },
+      "user"
+     ]
+    }
+   ]
+  },
+  "actions": [
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": 503
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": {
+       "error": {
+        "message": "This information could not be loaded. Please try again."
+       }
+      }
+     }
+    ]
+   },
+   {
+    "type": "run_function",
+    "params": {
+     "name": "notes.read",
+     "expected": [
+      {
+       "key": "notes",
+       "count": false
+      },
+      {
+       "key": "companies",
+       "count": false
+      },
+      {
+       "key": "contacts",
+       "count": false
+      },
+      {
+       "key": "projects",
+       "count": false
+      },
+      {
+       "key": "noteWritable",
+       "count": false
+      }
+     ],
+     "function_id": "387414ee-253f-4568-a084-d81df2c815b3"
+    }
+   },
+   {
+    "type": "patch_response",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/status_code",
+      "value": "{{after.resultStatus}}"
+     },
+     {
+      "op": "replace",
+      "path": "/body",
+      "value": "{{after.result}}"
+     }
+    ]
+   }
+  ],
+  "priority": 0,
+  "run_as": "actor",
+  "isActive": true,
+  "scope": {
+   "service_config_id": "d12d7537-4ff9-40b0-90bc-63d2a96eb73e"
+  },
+  "settings": {}
+ }
+}

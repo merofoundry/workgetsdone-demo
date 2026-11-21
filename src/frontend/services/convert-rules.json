@@ -1,0 +1,35 @@
+{
+  "_note": "Deactivated in fix round 1: it ran inside the service create, so a failed link could leave an unlinked task and a retry would duplicate it. The service chain (noteUpdate) now archives and links.",
+  "task: link converted note": {
+    "name": "task: link converted note",
+    "model_id": "dda81674-76dc-4790-b885-ac8b5d691068",
+    "trigger": "record_create",
+    "phase": "post_save",
+    "priority": 110,
+    "condition": {
+      "!=": [
+        {
+          "var": "after.source_note"
+        },
+        null
+      ]
+    },
+    "actions": [
+      {
+        "type": "update_record",
+        "target_record_id": "{{after.source_note}}",
+        "data": {
+          "converted_task": "{{record_id}}",
+          "archived": true
+        },
+        "trigger_rules": false
+      }
+    ],
+    "isActive": false,
+    "run_as": "actor",
+    "scope": {},
+    "settings": {
+      "on_failure": "abort"
+    }
+  }
+}

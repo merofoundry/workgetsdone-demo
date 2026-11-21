@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chosen direction dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F5F2;color:#1F1E1B;font-family:'Public Sans',ui-sans-serif,system-ui,sans-serif}
+a{color:#4338CA;text-decoration:none}a:hover{color:#3730A3;text-decoration:underline}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.bar a{color:#4A4744;font-size:14px;font-weight:500;padding:0 10px;border-radius:6px;min-height:40px;display:inline-flex;align-items:center}
+.bar a:hover{background:#ECEAE4;text-decoration:none;color:#1F1E1B}
+.bar a.on{color:#3730A3;background:#E6E4FB}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:6px;border:1px solid #CFCBC3;background:#fff;color:#1F1E1B;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{border-color:#8E8A83}
+.btn.primary{background:#4F46E5;border-color:#4F46E5;color:#fff}.btn.primary:hover{background:#4338CA}
+.btn:focus-visible,.bar a:focus-visible,a:focus-visible,.cmd:focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:2px}
+.panel{background:#fff;border:1px solid #E4E1DA;border-radius:8px}
+.ph{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #E4E1DA}
+.ph h2{margin:0;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#5C5955;font-weight:600}
+.ev{display:grid;grid-template-columns:52px 16px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 14px;border-bottom:1px solid #EEECE6;color:#1F1E1B;font-size:14px}
+.ev:last-child{border-bottom:0}
+.ev:hover{background:#F6F5F2;text-decoration:none}
+.ev .t{color:#5C5955;font-size:13px}
+.ev .ctx{color:#5C5955;font-size:13px}
+.dsep{padding:6px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#5C5955;background:#FBFAF8;border-bottom:1px solid #EEECE6;font-weight:600}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font-size:20px;font-weight:600;line-height:1.1}
+.stat span{font-size:12px;color:#5C5955}
+.card{background:#fff;border:1px solid #E4E1DA;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;color:#1F1E1B}
+.card:hover{border-color:#8E8A83;text-decoration:none}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:4px;background:#ECEAE4;color:#4A4744}
+.tag.live{background:#E6E4FB;color:#3730A3}.tag.hold{background:#ECEAE4;color:#4A4744}.tag.prop{background:#FBF3DC;color:#7A4E07}
+.cmd{display:flex;align-items:center;gap:10px;border:1px solid #CFCBC3;border-radius:6px;padding:0 10px;min-height:40px;background:#fff;color:#5C5955;font-size:14px;min-width:280px;cursor:text}
+kbd{font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #CFCBC3;border-radius:4px;padding:1px 5px;color:#4A4744;background:#F6F5F2}
+.k-call{color:#4F46E5}.k-task{color:#2E7D4F}
+@media (max-width:760px){.cols{grid-template-columns:1fr!important}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+</helmet>
+<div style="min-height:980px;display:flex;flex-direction:column">
+  <header class="bar" style="display:flex;align-items:center;gap:10px;padding:8px 16px;background:#fff;border-bottom:1px solid #E4E1DA;flex-wrap:wrap">
+    <a href="D-Dashboard.dc.html" style="font-weight:700;font-size:15px;color:#1F1E1B;display:inline-flex;align-items:center;gap:8px;padding-left:0">
+      <span style="width:22px;height:22px;border-radius:5px;background:#4F46E5;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700">W</span>WorkGetsDone
+    </a>
+    <nav aria-label="Main" style="display:flex;gap:2px;flex-wrap:wrap">
+      <a class="on" href="D-Dashboard.dc.html">Overview</a><a href="#">Companies</a><a href="#">Contacts</a><a href="D-Project.dc.html">Projects</a><a href="#">Tasks</a><a href="#">Calls</a><a href="#">Notes</a>
+    </nav>
+    <button class="cmd" type="button" style="margin-left:auto;font:inherit" aria-label="Open command palette">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <span style="flex:1;text-align:left">Jump to a record or action</span><kbd>Ctrl</kbd><kbd>K</kbd>
+    </button>
+    <a href="#" aria-label="Account" style="width:34px;height:34px;border-radius:50%;background:#D9D6CE;padding:0;justify-content:center;min-height:34px"></a>
+  </header>
+
+  <main style="flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:18px;max-width:1400px;width:100%;box-sizing:border-box;margin:0 auto">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
+      <div>
+        <h1 style="margin:0;font-size:22px;font-weight:700">Thursday, Oct 8</h1>
+        <p style="margin:4px 0 0;color:#5C5955;font-size:14px">3 scheduled today · 1 overdue · 4 projects active</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" type="button">New call <kbd>C</kbd></button>
+        <button class="btn" type="button">New note <kbd>N</kbd></button>
+        <button class="btn primary" type="button">New task <kbd style="background:#4338CA;border-color:#6366F1;color:#fff">T</kbd></button>
+      </div>
+    </div>
+
+    <div class="grid4" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+      <div class="panel" style="padding:12px 14px"><div class="stat"><b class="mono">3</b><span>on the calendar today</span></div></div>
+      <div class="panel" style="padding:12px 14px"><div class="stat"><b class="mono" style="color:#B42318">1</b><span>overdue task</span></div></div>
+      <div class="panel" style="padding:12px 14px"><div class="stat"><b class="mono">11</b><span>open tasks across projects</span></div></div>
+      <div class="panel" style="padding:12px 14px"><div class="stat"><b class="mono">6</b><span>open calls · 2 unbilled</span></div></div>
+    </div>
+
+    <div class="cols" style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:18px;align-items:start">
+      <section class="panel" aria-label="Agenda">
+        <div class="ph"><h2>Next 14 days</h2><a href="#" style="font-size:13px">Open calendar</a></div>
+        <div class="dsep">Today · Thu Oct 8</div>
+        <a class="ev" href="#"><span class="t mono">09:00</span><span class="k-call">●</span><span>Homepage wireframe review <span class="ctx">· Marcus Bell · Website redesign</span></span><span class="ctx">30m</span></a>
+        <a class="ev" href="#"><span class="t mono">13:00</span><span class="k-task">■</span><span>Map legacy permissions to grants <span class="ctx">· CRM migration</span></span><span class="ctx">billable</span></a>
+        <a class="ev" href="#"><span class="t mono">16:30</span><span class="k-call">●</span><span>Data cut sign-off <span class="ctx">· Dana Whitfield · CRM migration</span></span><span class="ctx">30m</span></a>
+        <div class="dsep">Fri Oct 9</div>
+        <a class="ev" href="#"><span class="t mono">09:00</span><span class="k-task">■</span><span>Draft migration runbook <span class="ctx">· CRM migration</span></span><span class="ctx"></span></a>
+        <div class="dsep">Mon Oct 12</div>
+        <a class="ev" href="#"><span class="t mono">10:30</span><span class="k-call">●</span><span>Contract renewal <span class="ctx">· Lena Okafor · Pinecrest Accounting</span></span><span class="ctx">45m</span></a>
+        <div class="dsep">Tue Oct 13</div>
+        <a class="ev" href="#"><span class="t mono">15:00</span><span class="k-task">■</span><span>Load test import script <span class="ctx">· CRM migration</span></span><span class="ctx">billable</span></a>
+        <div class="dsep">Thu Oct 15</div>
+        <a class="ev" href="#"><span class="t mono">14:00</span><span class="k-call">●</span><span>Design handoff <span class="ctx">· Marcus Bell · Website redesign</span></span><span class="ctx">60m</span></a>
+        <a class="ev" href="#"><span class="t mono">17:00</span><span class="k-task">■</span><span>Send October invoice <span class="ctx">· Harbor &amp; Finch</span></span><span class="ctx"></span></a>
+        <div class="dsep">Fri Oct 16</div>
+        <a class="ev" href="#"><span class="t mono">11:00</span><span class="k-task">■</span><span>Archive on-hold project notes <span class="ctx">· Warehouse scanner rollout</span></span><span class="ctx"></span></a>
+        <div style="padding:8px 14px;font-size:12.5px;color:#5C5955;border-top:1px solid #E4E1DA"><span class="k-call">●</span> call &nbsp; <span class="k-task">■</span> task</div>
+      </section>
+
+      <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+        <section class="panel" aria-label="Overdue" style="border-color:#E6C5C1">
+          <div class="ph" style="border-color:#E6C5C1"><h2 style="color:#B42318">Overdue</h2></div>
+          <a class="ev" href="#"><span class="t mono">Oct 5</span><span class="k-task">■</span><span>Export legacy contacts CSV <span class="ctx">· CRM migration</span></span><span class="ctx" style="color:#B42318;font-weight:600">3 days</span></a>
+        </section>
+        <section aria-label="Projects" style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#5C5955;font-weight:600">Projects</h2><a href="#" style="font-size:13px">All 6</a></div>
+          <a class="card" href="D-Project.dc.html"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:600">CRM migration</span><span class="tag live">Active</span></div><span style="font-size:13px;color:#5C5955">Northwind Traders</span><div class="mono" style="font-size:13px;color:#4A4744;display:flex;gap:14px"><span>4 tasks</span><span>2 calls</span><span>11 notes</span></div></a>
+          <a class="card" href="#"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:600">Website redesign</span><span class="tag live">Active</span></div><span style="font-size:13px;color:#5C5955">Harbor &amp; Finch</span><div class="mono" style="font-size:13px;color:#4A4744;display:flex;gap:14px"><span>6 tasks</span><span>1 call</span><span>8 notes</span></div></a>
+          <a class="card" href="#"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:600">Quarterly filings automation</span><span class="tag prop">Proposed</span></div><span style="font-size:13px;color:#5C5955">Pinecrest Accounting</span><div class="mono" style="font-size:13px;color:#4A4744;display:flex;gap:14px"><span>1 task</span><span>3 calls</span><span>2 notes</span></div></a>
+          <a class="card" href="#"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:600">Warehouse scanner rollout</span><span class="tag hold">On hold</span></div><span style="font-size:13px;color:#5C5955">Northwind Traders</span><div class="mono" style="font-size:13px;color:#4A4744;display:flex;gap:14px"><span>0 tasks</span><span>0 calls</span><span>5 notes</span></div></a>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":980}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+import './stage-guard.mjs';
+import { chromium } from '@playwright/test';
+import { readFileSync, appendFileSync, writeFileSync, mkdirSync } from 'node:fs';
+const root = new URL('../../', import.meta.url);
+const evidence = new URL('verification/2026-10-11-full-build/', root);
+const base = process.env.WGD_BASE || 'https://workgetsdone.staging.merofoundry.app';
+const checks = [];
+const check = (name, passed, detail) => { checks.push({ name, passed: !!passed, evidence: detail }); console.log(`${passed ? 'PASS' : 'FAIL'} ${name}: ${JSON.stringify(detail)}`); if (!passed) throw new Error(name); };
+const passwordFor = name => {
+  const line = readFileSync(new URL(`.env-${name}`, root), 'utf8').split('\n').find(line => line.startsWith(`${name.toUpperCase()}_PASSWORD=`));
+  if (!line) throw new Error(`Missing ${name} verification credential`);
+  return line.slice(line.indexOf('=') + 1).replace(/^['"]|['"]$/g, '').trim();
+};
+mkdirSync(evidence, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+let failure;
+try {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage(); const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto(base + '/sign-in', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: 'Sign in to your work' }).waitFor();
+  await page.getByLabel('Email', { exact: true }).fill('bob@workgetsdone.test');
+  await page.getByLabel('Password', { exact: true }).fill(passwordFor('bob'));
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: /^Account:/ }).waitFor();
+  check('bob: signed in', true, { path: new URL(page.url()).pathname });
+  const stamp = Date.now().toString(36); const name = `Task10 Co ${stamp}`; const city = 'Dallas';
+  await page.goto(`${base}/companies`);
+  await page.getByRole('button', { name: 'New company' }).click();
+  const create = page.getByRole('dialog', { name: 'New company' });
+  await create.getByLabel('Name', { exact: true }).fill(name);
+  await create.getByRole('button', { name: 'Create company' }).click();
+  await page.waitForURL(/\/companies\/[0-9a-f-]{36}$/);
+  await page.getByRole('heading', { name, exact: true }).waitFor();
+  const companyPath = new URL(page.url()).pathname;
+  check('bob: created a company and landed on its page', true, { path: companyPath });
+  await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  const edit = page.getByRole('dialog', { name: 'Edit company' });
+  await edit.getByLabel('City', { exact: true }).fill(city);
+  await edit.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('dialog').waitFor({ state: 'detached' });
+  await page.getByText(city).first().waitFor();
+  check('bob: edited the company city', true, { city });
+  await page.getByRole('button', { name: /^New task/ }).click();
+  const task = page.getByRole('dialog', { name: 'New task' });
+  await task.getByText(`Company: ${name}`).waitFor();
+  const title = `Task10 follow-up ${stamp}`;
+  await task.getByLabel('Task name').fill(title);
+  await task.getByRole('button', { name: 'Create task' }).click();
+  await page.getByRole('dialog').waitFor({ state: 'detached' });
+  await page.getByRole('link', { name: title }).waitFor();
+  check('bob: the new task appears in the company timeline', true, { title, path: new URL(page.url()).pathname });
+  await page.waitForLoadState('networkidle');
+  await page.screenshot({ path: new URL('hosted-company-edit-bob.png', evidence).pathname, fullPage: true });
+  check('no script errors', errors.length === 0, { pageErrors: errors });
+  await context.close();
+} catch (error) { failure = error.message; console.error(failure); }
+finally {
+  await browser.close();
+  writeFileSync(new URL('hosted-entities-results.json', evidence), JSON.stringify({ at: new Date().toISOString(), base, checks, failure: failure || null }, null, 2));
+  appendFileSync(new URL('BUILD_LOG.md', root), `\n\n### ${new Date().toISOString()} — Hosted create/edit dialogs check as bob (Task 10)\n\n${checks.filter(item => item.passed).length}/${checks.length} checks passed. Evidence: ${evidence.pathname.slice(root.pathname.length)}hosted-forms-results.json, hosted-company-edit-bob.png.\n${failure ? `FAILED: ${failure}\n` : ''}`);
+}
+if (failure) process.exit(1);

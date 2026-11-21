@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Planner project detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F5F2;color:#1F1E1B;font-family:'Public Sans',ui-sans-serif,system-ui,sans-serif}
+a{color:#4338CA;text-decoration:none}a:hover{color:#3730A3;text-decoration:underline}
+.nav a{color:#4A4744;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:14.5px;font-weight:500;min-height:44px;box-sizing:border-box}
+.nav a:hover{background:#ECEAE4;color:#1F1E1B;text-decoration:none}
+.nav a.on{background:#E6E4FB;color:#3730A3}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #CFCBC3;background:#fff;color:#1F1E1B;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{border-color:#8E8A83}
+.btn.primary{background:#4F46E5;border-color:#4F46E5;color:#fff}.btn.primary:hover{background:#4338CA}
+.btn.sm{min-height:34px;padding:0 10px;font-size:13px}
+.btn.danger{color:#B42318;border-color:#E6C5C1}.btn.danger:hover{background:#FDF2F1;border-color:#B42318}
+.btn:focus-visible,.nav a:focus-visible,a:focus-visible,.tog:focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:2px}
+.card{background:#fff;border:1px solid #E4E1DA;border-radius:10px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid #E4E1DA;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:15px;font-weight:700}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 16px;border-bottom:1px solid #EEECE6;align-items:start}
+.row:last-child{border-bottom:0}
+.meta{color:#5C5955;font-size:13px}
+.tog{background:none;border:0;font:inherit;font-size:13px;color:#4338CA;cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:#ECEAE4;color:#4A4744}
+.pill.active{background:#E6E4FB;color:#3730A3}
+.pill.bill{background:#E3F3E8;color:#1E6B3A}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0;font-size:14px}
+dt{color:#5C5955}dd{margin:0}
+.chk{width:18px;height:18px;border:1.5px solid #8E8A83;border-radius:5px;display:inline-block;flex:none;margin-top:2px}
+@media (max-width:760px){.shell{flex-direction:column}.side{width:100%!important}.two{grid-template-columns:1fr!important}}
+</style>
+</helmet>
+<div class="shell" style="display:flex;min-height:1120px">
+  <aside class="side" style="width:232px;flex:none;padding:20px 16px;display:flex;flex-direction:column;gap:20px;border-right:1px solid #E4E1DA;background:#F6F5F2">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;color:#1F1E1B;font-weight:700;font-size:16px;padding:4px 8px">
+      <span style="width:28px;height:28px;border-radius:7px;background:#4F46E5;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">W</span>
+      WorkGetsDone
+    </a>
+    <nav class="nav" style="display:flex;flex-direction:column;gap:2px" aria-label="Main">
+      <a href="Main.dc.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7h12M6 1v4M10 1v4"/></svg>Dashboard</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 14V4l5-2v12M7 14V7l7-2v9M2 14h12"/></svg>Companies</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5.5" r="3"/><path d="M2.5 14c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg>Contacts</a>
+      <a class="on" href="A-Project.dc.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5h4l1.5 2H14v7H2z"/></svg>Projects</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5 8.2l2 2 4-4.4"/></svg>Tasks</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3.5l2.5-1 1.7 3.2-1.6 1.3a8 8 0 0 0 3.4 3.4l1.3-1.6 3.2 1.7-1 2.5C7.5 13.5 2.5 8.5 3 3.5z"/></svg>Calls</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h6l3 3v9H4z M5.5 8h5M5.5 11h5"/></svg>Notes</a>
+    </nav>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:2px" class="nav">
+      <a href="#"><span style="width:24px;height:24px;border-radius:50%;background:#D9D6CE;display:inline-block"></span>Rob Mero</a>
+      <a href="#">Sign out</a>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 560px;min-width:0;padding:28px 32px;display:flex;flex-direction:column;gap:24px">
+    <nav aria-label="Breadcrumb" style="font-size:13px;color:#5C5955;display:flex;gap:8px;align-items:center">
+      <a href="#">Projects</a><span>/</span><a href="#">Northwind Traders</a><span>/</span><span>CRM migration</span>
+    </nav>
+
+    <header style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:68ch">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h1 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-.01em">CRM migration</h1>
+          <span class="pill active">Active</span>
+        </div>
+        <p style="margin:0;color:#5C5955;font-size:15px"><a href="#">Northwind Traders</a> · owned by Rob Mero · Sep 15 to Nov 30, 2026</p>
+        <p style="margin:4px 0 0;font-size:14.5px;line-height:1.55">Move Northwind's contact and project history out of the 2007 system into the new platform without losing per-user access rules. Phase 2 covers notes and attachments.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" type="button">Edit</button>
+        <button class="btn" type="button"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="4" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="11" cy="12" r="2"/><path d="M6 7l3-2M6 9l3 2"/></svg>Share · 3 people</button>
+        <button class="btn danger" type="button">Archive</button>
+      </div>
+    </header>
+
+    <div class="two" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+        <section class="card" aria-label="Tasks">
+          <div class="sec-h">
+            <h2>Tasks <span class="meta" style="font-weight:500">· 4 open</span></h2>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="tog" type="button">Show 7 completed</button>
+              <button class="btn sm" type="button">Add task</button>
+            </div>
+          </div>
+          <div class="row"><div style="display:flex;gap:10px"><span class="chk" aria-hidden="true"></span><div><a href="#" style="font-weight:600;color:#1F1E1B">Map legacy permissions to grants</a><div class="meta">Due Thu Oct 8 · Dana Whitfield · <span class="pill bill">Billable</span></div></div></div><span class="meta">Today</span></div>
+          <div class="row"><div style="display:flex;gap:10px"><span class="chk" aria-hidden="true"></span><div><a href="#" style="font-weight:600;color:#1F1E1B">Draft migration runbook</a><div class="meta">Due Fri Oct 9</div></div></div><span class="meta">Tomorrow</span></div>
+          <div class="row"><div style="display:flex;gap:10px"><span class="chk" aria-hidden="true"></span><div><a href="#" style="font-weight:600;color:#1F1E1B">Load test import script</a><div class="meta">Due Tue Oct 13 · <span class="pill bill">Billable</span></div></div></div><span class="meta">In 5 days</span></div>
+          <div class="row"><div style="display:flex;gap:10px"><span class="chk" aria-hidden="true"></span><div><a href="#" style="font-weight:600;color:#1F1E1B">Export legacy contacts CSV</a><div class="meta">Due Mon Oct 5 · Dana Whitfield</div></div></div><span class="meta" style="color:#B42318;font-weight:600">3 days late</span></div>
+        </section>
+
+        <section class="card" aria-label="Calls">
+          <div class="sec-h">
+            <h2>Calls <span class="meta" style="font-weight:500">· 2 open</span></h2>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="tog" type="button">Show 5 completed</button>
+              <button class="btn sm" type="button">Add call</button>
+            </div>
+          </div>
+          <div class="row"><div><a href="#" style="font-weight:600;color:#1F1E1B">Data cut sign-off</a><div class="meta">Thu Oct 8, 16:30 · with Dana Whitfield · 30 min · <span class="pill bill">Billable</span></div></div><span class="meta">Today</span></div>
+          <div class="row"><div><a href="#" style="font-weight:600;color:#1F1E1B">Kickoff follow-up</a><div class="meta">Mon Oct 5, 9:30 · with Dana Whitfield · 45 min</div></div><button class="tog" type="button">Mark complete</button></div>
+        </section>
+
+        <section class="card" aria-label="Notes">
+          <div class="sec-h">
+            <h2>Notes <span class="meta" style="font-weight:500">· 11</span></h2>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="tog" type="button">Show 3 archived</button>
+              <button class="btn sm" type="button">Add note</button>
+            </div>
+          </div>
+          <div class="row"><div><div style="font-weight:600">Data cut agreed for Oct 9</div><p style="margin:4px 0 0;font-size:14px;line-height:1.5;max-width:68ch">Dana confirmed the Friday snapshot is the one we migrate. Anything entered after that goes through the delta script on cutover day.</p><div class="meta" style="margin-top:6px">Oct 7 · from call “Filing calendar scope” · 1 attachment</div></div><button class="tog" type="button">Convert to task</button></div>
+          <div class="row"><div><div style="font-weight:600">Permission mapping questions</div><p style="margin:4px 0 0;font-size:14px;line-height:1.5;max-width:68ch">Legacy stores one row per user per record. Decide whether subtree grants replace the per-task rows or sit beside them.</p><div class="meta" style="margin-top:6px">Oct 6 · on task “Map legacy permissions to grants”</div></div><button class="tog" type="button">Convert to task</button></div>
+          <div class="row"><div><div style="font-weight:600">Scanner project parked</div><p style="margin:4px 0 0;font-size:14px;line-height:1.5;max-width:68ch">Northwind wants the warehouse scanner work on hold until migration is done. Keep its notes reachable from here.</p><div class="meta" style="margin-top:6px">Oct 2</div></div><button class="tog" type="button">Convert to task</button></div>
+        </section>
+      </div>
+
+      <aside style="display:flex;flex-direction:column;gap:20px;min-width:0">
+        <section class="card" aria-label="Details" style="padding:16px">
+          <h2 style="margin:0 0 12px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#5C5955;font-weight:600">Details</h2>
+          <dl>
+            <dt>Company</dt><dd><a href="#">Northwind Traders</a></dd>
+            <dt>Contact</dt><dd><a href="#">Dana Whitfield</a></dd>
+            <dt>Owner</dt><dd>Rob Mero</dd>
+            <dt>Start</dt><dd>Sep 15, 2026</dd>
+            <dt>End</dt><dd>Nov 30, 2026</dd>
+            <dt>Parent</dt><dd class="meta">None</dd>
+          </dl>
+        </section>
+        <section class="card" aria-label="Sub-projects" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <h2 style="margin:0;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#5C5955;font-weight:600">Sub-projects</h2>
+          <div style="display:flex;justify-content:space-between;gap:8px;font-size:14px"><a href="#">Phase 2 · notes and files</a><span class="pill">Proposed</span></div>
+          <button class="tog" type="button" style="text-align:left">Add sub-project</button>
+        </section>
+        <section class="card" aria-label="Access" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <h2 style="margin:0;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#5C5955;font-weight:600">Who can see this</h2>
+          <div style="font-size:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between"><span>Rob Mero</span><span class="meta">owner</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Sam Adeyemi</span><span class="meta">read, write</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Jo Lindqvist</span><span class="meta">read · this subtree</span></div>
+          </div>
+          <button class="tog" type="button" style="text-align:left">Manage sharing</button>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,3123 @@
+{
+ "comment": "Note queries behind notes.list, notes.read and the project/company/contact timelines, with converted_task selected (Task 15). Ids: see services in provision-convert.py.",
+ "queries": {
+  "projects.timeline": {
+   "joins": [
+    {
+     "type": "left",
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "cl",
+     "modelName": "call",
+     "relationshipName": "note_call_to_8a3d9382-0ad7-4f18-98d0-cd914707a0c1"
+    },
+    {
+     "type": "left",
+     "alias": "clp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "t",
+     "modelName": "task",
+     "relationshipName": "note_task_to_dda81674-76dc-4790-b885-ac8b5d691068"
+    },
+    {
+     "type": "left",
+     "alias": "tp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "pr",
+     "modelName": "project",
+     "relationshipName": "note_project_to_49b6dd3d-7c76-49d4-943b-a6b7b88bdb08"
+    },
+    {
+     "type": "left",
+     "alias": "prp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "co",
+     "modelName": "company",
+     "relationshipName": "note_company_to_dbc0feab-13e1-4495-bee4-a2c84271e175"
+    },
+    {
+     "type": "left",
+     "alias": "cop",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "ct",
+     "modelName": "contact",
+     "relationshipName": "note_contact_to_54a5f4e5-af5c-4824-99a4-eb5f44160229"
+    },
+    {
+     "type": "left",
+     "alias": "ctp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions"
+    },
+    {
+     "type": "left",
+     "alias": "rv_dp",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "dp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_clp",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "clp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_tp",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "tp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_prp",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "prp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_cop",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "cop"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_ctp",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "ctp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "rules": [
+       {
+        "rules": [
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "operator": "is_null"
+         },
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "value": "true",
+          "operator": "!="
+         }
+        ],
+        "combinator": "or"
+       },
+       {
+        "rules": [
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "dp"
+            },
+            "operator": "is_not_null"
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_dp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "clp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_clp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "tp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_tp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "prp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_prp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "cop"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_cop"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "ctp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_ctp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         }
+        ],
+        "combinator": "or"
+       }
+      ],
+      "combinator": "and"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "deleted_at"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "modelAlias": "note",
+         "fieldName": "project"
+        },
+        "operator": "=",
+        "value": ":id"
+       },
+       {
+        "field": {
+         "modelAlias": "t",
+         "fieldName": "project"
+        },
+        "operator": "=",
+        "value": ":id"
+       },
+       {
+        "field": {
+         "modelAlias": "cl",
+         "fieldName": "project"
+        },
+        "operator": "=",
+        "value": ":id"
+       }
+      ]
+     }
+    ]
+   },
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "description",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "body",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "occurred_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "archived",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "author",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "call",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "task",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "project",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "company",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "contact",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "deleted_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "version",
+     "modelAlias": "note"
+    },
+    {
+     "modelAlias": "note",
+     "fieldName": "converted_task"
+    }
+   ],
+   "fromAlias": "note",
+   "fromModel": "note",
+   "distinct": true,
+   "limit": 1001
+  },
+  "notes.list": {
+   "joins": [
+    {
+     "type": "left",
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "cl",
+     "modelName": "call",
+     "relationshipName": "note_call_to_8a3d9382-0ad7-4f18-98d0-cd914707a0c1"
+    },
+    {
+     "type": "left",
+     "alias": "clp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "t",
+     "modelName": "task",
+     "relationshipName": "note_task_to_dda81674-76dc-4790-b885-ac8b5d691068"
+    },
+    {
+     "type": "left",
+     "alias": "tp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "pr",
+     "modelName": "project",
+     "relationshipName": "note_project_to_49b6dd3d-7c76-49d4-943b-a6b7b88bdb08"
+    },
+    {
+     "type": "left",
+     "alias": "prp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "co",
+     "modelName": "company",
+     "relationshipName": "note_company_to_dbc0feab-13e1-4495-bee4-a2c84271e175"
+    },
+    {
+     "type": "left",
+     "alias": "cop",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "ct",
+     "modelName": "contact",
+     "relationshipName": "note_contact_to_54a5f4e5-af5c-4824-99a4-eb5f44160229"
+    },
+    {
+     "type": "left",
+     "alias": "ctp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions"
+    },
+    {
+     "type": "left",
+     "alias": "rv_dp",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "dp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_clp",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "clp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_tp",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "tp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_prp",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "prp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_cop",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "cop"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_ctp",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "ctp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "rules": [
+       {
+        "rules": [
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "operator": "is_null"
+         },
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "value": "true",
+          "operator": "!="
+         }
+        ],
+        "combinator": "or"
+       },
+       {
+        "rules": [
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "dp"
+            },
+            "operator": "is_not_null"
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_dp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "clp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_clp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "tp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_tp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "prp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_prp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "cop"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_cop"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "ctp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_ctp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         }
+        ],
+        "combinator": "or"
+       }
+      ],
+      "combinator": "and"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "deleted_at"
+      },
+      "operator": "is_null"
+     }
+    ]
+   },
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "description",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "body",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "occurred_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "archived",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "author",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "call",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "task",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "project",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "company",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "contact",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "deleted_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "version",
+     "modelAlias": "note"
+    },
+    {
+     "modelAlias": "note",
+     "fieldName": "converted_task"
+    }
+   ],
+   "fromAlias": "note",
+   "fromModel": "note",
+   "distinct": true,
+   "limit": 1001
+  },
+  "notes.read": {
+   "joins": [
+    {
+     "type": "left",
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "cl",
+     "modelName": "call",
+     "relationshipName": "note_call_to_8a3d9382-0ad7-4f18-98d0-cd914707a0c1"
+    },
+    {
+     "type": "left",
+     "alias": "clp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "t",
+     "modelName": "task",
+     "relationshipName": "note_task_to_dda81674-76dc-4790-b885-ac8b5d691068"
+    },
+    {
+     "type": "left",
+     "alias": "tp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "pr",
+     "modelName": "project",
+     "relationshipName": "note_project_to_49b6dd3d-7c76-49d4-943b-a6b7b88bdb08"
+    },
+    {
+     "type": "left",
+     "alias": "prp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "co",
+     "modelName": "company",
+     "relationshipName": "note_company_to_dbc0feab-13e1-4495-bee4-a2c84271e175"
+    },
+    {
+     "type": "left",
+     "alias": "cop",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "ct",
+     "modelName": "contact",
+     "relationshipName": "note_contact_to_54a5f4e5-af5c-4824-99a4-eb5f44160229"
+    },
+    {
+     "type": "left",
+     "alias": "ctp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions"
+    },
+    {
+     "type": "left",
+     "alias": "rv_dp",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "dp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_clp",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "clp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_tp",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "tp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_prp",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "prp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_cop",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "cop"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_ctp",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "ctp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "rules": [
+       {
+        "rules": [
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "operator": "is_null"
+         },
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "value": "true",
+          "operator": "!="
+         }
+        ],
+        "combinator": "or"
+       },
+       {
+        "rules": [
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "dp"
+            },
+            "operator": "is_not_null"
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_dp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "clp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_clp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "tp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_tp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "prp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_prp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "cop"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_cop"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "ctp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_ctp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         }
+        ],
+        "combinator": "or"
+       }
+      ],
+      "combinator": "and"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "deleted_at"
+      },
+      "operator": "is_null"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "key"
+      },
+      "operator": "=",
+      "value": ":id"
+     }
+    ]
+   },
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "description",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "body",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "occurred_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "archived",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "author",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "call",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "task",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "project",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "company",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "contact",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "deleted_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "version",
+     "modelAlias": "note"
+    },
+    {
+     "modelAlias": "note",
+     "fieldName": "converted_task"
+    }
+   ],
+   "fromAlias": "note",
+   "fromModel": "note",
+   "distinct": true,
+   "limit": 1001
+  },
+  "companies.timeline": {
+   "joins": [
+    {
+     "type": "left",
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "cl",
+     "modelName": "call",
+     "relationshipName": "note_call_to_8a3d9382-0ad7-4f18-98d0-cd914707a0c1"
+    },
+    {
+     "type": "left",
+     "alias": "clp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "t",
+     "modelName": "task",
+     "relationshipName": "note_task_to_dda81674-76dc-4790-b885-ac8b5d691068"
+    },
+    {
+     "type": "left",
+     "alias": "tp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "pr",
+     "modelName": "project",
+     "relationshipName": "note_project_to_49b6dd3d-7c76-49d4-943b-a6b7b88bdb08"
+    },
+    {
+     "type": "left",
+     "alias": "prp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "co",
+     "modelName": "company",
+     "relationshipName": "note_company_to_dbc0feab-13e1-4495-bee4-a2c84271e175"
+    },
+    {
+     "type": "left",
+     "alias": "cop",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "ct",
+     "modelName": "contact",
+     "relationshipName": "note_contact_to_54a5f4e5-af5c-4824-99a4-eb5f44160229"
+    },
+    {
+     "type": "left",
+     "alias": "ctp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions"
+    },
+    {
+     "type": "left",
+     "alias": "rv_dp",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "dp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_clp",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "clp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_tp",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "tp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_prp",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "prp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_cop",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "cop"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_ctp",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "ctp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "rules": [
+       {
+        "rules": [
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "operator": "is_null"
+         },
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "value": "true",
+          "operator": "!="
+         }
+        ],
+        "combinator": "or"
+       },
+       {
+        "rules": [
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "dp"
+            },
+            "operator": "is_not_null"
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_dp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "clp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_clp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "tp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_tp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "prp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_prp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "cop"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_cop"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "ctp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_ctp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         }
+        ],
+        "combinator": "or"
+       }
+      ],
+      "combinator": "and"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "deleted_at"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "modelAlias": "note",
+         "fieldName": "company"
+        },
+        "operator": "=",
+        "value": ":id"
+       }
+      ]
+     }
+    ]
+   },
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "description",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "body",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "occurred_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "archived",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "author",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "call",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "task",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "project",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "company",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "contact",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "deleted_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "version",
+     "modelAlias": "note"
+    },
+    {
+     "modelAlias": "note",
+     "fieldName": "converted_task"
+    }
+   ],
+   "fromAlias": "note",
+   "fromModel": "note",
+   "distinct": true,
+   "limit": 1001
+  },
+  "contacts.timeline": {
+   "joins": [
+    {
+     "type": "left",
+     "alias": "dp",
+     "modelName": "note_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "cl",
+     "modelName": "call",
+     "relationshipName": "note_call_to_8a3d9382-0ad7-4f18-98d0-cd914707a0c1"
+    },
+    {
+     "type": "left",
+     "alias": "clp",
+     "modelName": "call_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "t",
+     "modelName": "task",
+     "relationshipName": "note_task_to_dda81674-76dc-4790-b885-ac8b5d691068"
+    },
+    {
+     "type": "left",
+     "alias": "tp",
+     "modelName": "task_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "pr",
+     "modelName": "project",
+     "relationshipName": "note_project_to_49b6dd3d-7c76-49d4-943b-a6b7b88bdb08"
+    },
+    {
+     "type": "left",
+     "alias": "prp",
+     "modelName": "project_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "co",
+     "modelName": "company",
+     "relationshipName": "note_company_to_dbc0feab-13e1-4495-bee4-a2c84271e175"
+    },
+    {
+     "type": "left",
+     "alias": "cop",
+     "modelName": "company_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_permissions"
+    },
+    {
+     "type": "left",
+     "alias": "ct",
+     "modelName": "contact",
+     "relationshipName": "note_contact_to_54a5f4e5-af5c-4824-99a4-eb5f44160229"
+    },
+    {
+     "type": "left",
+     "alias": "ctp",
+     "modelName": "contact_perm",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        },
+        "right": {
+         "parameter": "current_user_id"
+        }
+       }
+      ]
+     },
+     "relationshipName": "permissions"
+    },
+    {
+     "type": "left",
+     "alias": "rv_dp",
+     "modelName": "note_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "note_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "note_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "dp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_dp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "dp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "note_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_clp",
+     "modelName": "call_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "call_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "call_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "clp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_clp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "clp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "call_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_tp",
+     "modelName": "task_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "task_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "task_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "tp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_tp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "tp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "task_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_prp",
+     "modelName": "project_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "project_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "project_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "prp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_prp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "prp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "project_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_cop",
+     "modelName": "company_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "company_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "company_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "cop"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_cop"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "cop"
+        }
+       }
+      ]
+     },
+     "relationshipName": "company_revoked"
+    },
+    {
+     "type": "left",
+     "alias": "rv_ctp",
+     "modelName": "contact_revocation",
+     "onPredicate": {
+      "terms": [
+       {
+        "left": {
+         "fieldName": "contact_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "contact_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "user_id",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "user_id",
+         "modelAlias": "ctp"
+        }
+       },
+       {
+        "left": {
+         "fieldName": "revoked_source",
+         "modelAlias": "rv_ctp"
+        },
+        "right": {
+         "fieldName": "source",
+         "modelAlias": "ctp"
+        }
+       }
+      ]
+     },
+     "relationshipName": "contact_revoked"
+    }
+   ],
+   "where": {
+    "combinator": "and",
+    "rules": [
+     {
+      "rules": [
+       {
+        "rules": [
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "operator": "is_null"
+         },
+         {
+          "field": {
+           "fieldName": "mark_deleted",
+           "modelAlias": "note"
+          },
+          "value": "true",
+          "operator": "!="
+         }
+        ],
+        "combinator": "or"
+       },
+       {
+        "rules": [
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "dp"
+            },
+            "operator": "is_not_null"
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_dp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "clp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_clp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "tp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_tp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "prp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_prp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "cop"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_cop"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         },
+         {
+          "rules": [
+           {
+            "field": {
+             "fieldName": "scope",
+             "modelAlias": "ctp"
+            },
+            "value": "subtree",
+            "operator": "="
+           },
+           {
+            "field": {
+             "fieldName": "user_id",
+             "modelAlias": "rv_ctp"
+            },
+            "operator": "is_null"
+           }
+          ],
+          "combinator": "and"
+         }
+        ],
+        "combinator": "or"
+       }
+      ],
+      "combinator": "and"
+     },
+     {
+      "field": {
+       "modelAlias": "note",
+       "fieldName": "deleted_at"
+      },
+      "operator": "is_null"
+     },
+     {
+      "combinator": "or",
+      "rules": [
+       {
+        "field": {
+         "modelAlias": "note",
+         "fieldName": "contact"
+        },
+        "operator": "=",
+        "value": ":id"
+       }
+      ]
+     }
+    ]
+   },
+   "select": [
+    {
+     "fieldName": "key",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "description",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "body",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "occurred_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "archived",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "author",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "call",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "task",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "project",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "company",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "contact",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "deleted_at",
+     "modelAlias": "note"
+    },
+    {
+     "fieldName": "version",
+     "modelAlias": "note"
+    },
+    {
+     "modelAlias": "note",
+     "fieldName": "converted_task"
+    }
+   ],
+   "fromAlias": "note",
+   "fromModel": "note",
+   "distinct": true,
+   "limit": 1001
+  }
+ }
+}

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "6e0f7d61-a18b-4239-a1dc-c99229e50504",
+    "tenantId": "43cea6b2-e879-4958-99be-a8fa2293a32d",
+    "workspaceId": "2018a676-4cd6-4904-98db-068caf903b70",
+    "applicationId": "104c98da-971b-4a99-8fad-4fd2ef06eb3f",
+    "modelId": "dda81674-76dc-4790-b885-ac8b5d691068",
+    "name": "byof persist task create fields",
+    "description": null,
+    "condition": {
+      "==": [
+        1,
+        1
+      ]
+    },
+    "actions": [
+      {
+        "data": {
+          "key": "{{after.key}}",
+          "version": "{{after.version}}"
+        },
+        "type": "update_record",
+        "trigger_rules": false,
+        "target_record_id": "{{record_id}}"
+      }
+    ],
+    "trigger": "record_create",
+    "phase": "post_save",
+    "priority": 100,
+    "isActive": true,
+    "run_as": "actor",
+    "scope": {},
+    "settings": {
+      "on_failure": "abort"
+    },
+    "createdBy": "5c4b4a95-116f-41f8-914a-84666a886ca0",
+    "createdAt": "2026-10-08T14:20:15.561715Z",
+    "updatedAt": "2026-10-08T14:22:05.594263Z"
+  },
+  {
+    "id": "8c56e731-7453-43de-911a-f369dd7fac77",
+    "tenantId": "43cea6b2-e879-4958-99be-a8fa2293a32d",
+    "workspaceId": "2018a676-4cd6-4904-98db-068caf903b70",
+    "applicationId": "104c98da-971b-4a99-8fad-4fd2ef06eb3f",
+    "modelId": "ddef37bc-28f6-458a-b30c-6575096e4709",
+    "name": "byof persist note create fields",
+    "description": null,
+    "condition": {
+      "==": [
+        1,
+        1
+      ]
+    },
+    "actions": [
+      {
+        "data": {
+          "key": "{{after.key}}",
+          "version": "{{after.version}}"
+        },
+        "type": "update_record",
+        "trigger_rules": false,
+        "target_record_id": "{{record_id}}"
+      }
+    ],
+    "trigger": "record_create",
+    "phase": "post_save",
+    "priority": 100,
+    "isActive": true,
+    "run_as": "actor",
+    "scope": {},
+    "settings": {
+      "on_failure": "abort"
+    },
+    "createdBy": "5c4b4a95-116f-41f8-914a-84666a886ca0",
+    "createdAt": "2026-10-08T14:20:16.746358Z",
+    "updatedAt": "2026-10-08T14:22:06.583523Z"
+  },
+  {
+    "id": "e3404071-ad2f-4294-be53-7c69607e85d0",
+    "tenantId": "43cea6b2-e879-4958-99be-a8fa2293a32d",
+    "workspaceId": "2018a676-4cd6-4904-98db-068caf903b70",
+    "applicationId": "104c98da-971b-4a99-8fad-4fd2ef06eb3f",
+    "modelId": "8a3d9382-0ad7-4f18-98d0-cd914707a0c1",
+    "name": "byof persist call create fields",
+    "description": null,
+    "condition": {
+      "==": [
+        1,
+        1
+      ]
+    },
+    "actions": [
+      {
+        "data": {
+          "key": "{{after.key}}",
+          "version": "{{after.version}}"
+        },
+        "type": "update_record",
+        "trigger_rules": false,
+        "target_record_id": "{{record_id}}"
+      }
+    ],
+    "trigger": "record_create",
+    "phase": "post_save",
+    "priority": 100,
+    "isActive": true,
+    "run_as": "actor",
+    "scope": {},
+    "settings": {
+      "on_failure": "abort"
+    },
+    "createdBy": "5c4b4a95-116f-41f8-914a-84666a886ca0",
+    "createdAt": "2026-10-08T14:20:16.128413Z",
+    "updatedAt": "2026-10-08T14:22:06.087006Z"
+  }
+]

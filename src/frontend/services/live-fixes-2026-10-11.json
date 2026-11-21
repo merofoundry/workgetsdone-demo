@@ -1,0 +1,363 @@
+{
+  "05b6acfa-4482-4e21-bc5e-91a4c71b79da": {
+    "op": "create_rule",
+    "body": {
+      "name": "byof persist company create fields",
+      "model_id": "dbc0feab-13e1-4495-bee4-a2c84271e175",
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "actions": [
+        {
+          "data": {
+            "key": "{{after.key}}",
+            "version": "{{after.version}}"
+          },
+          "type": "update_record",
+          "trigger_rules": false,
+          "target_record_id": "{{record_id}}"
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      }
+    }
+  },
+  "a21ecd80-4240-4653-803c-90c3f176a619": {
+    "op": "create_rule",
+    "body": {
+      "name": "byof persist contact create fields",
+      "model_id": "54a5f4e5-af5c-4824-99a4-eb5f44160229",
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "actions": [
+        {
+          "data": {
+            "key": "{{after.key}}",
+            "version": "{{after.version}}"
+          },
+          "type": "update_record",
+          "trigger_rules": false,
+          "target_record_id": "{{record_id}}"
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      }
+    }
+  },
+  "02b17033-eacc-4f06-848a-254493126639": {
+    "op": "create_rule",
+    "body": {
+      "name": "byof persist project create fields",
+      "model_id": "49b6dd3d-7c76-49d4-943b-a6b7b88bdb08",
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "actions": [
+        {
+          "data": {
+            "key": "{{after.key}}",
+            "version": "{{after.version}}"
+          },
+          "type": "update_record",
+          "trigger_rules": false,
+          "target_record_id": "{{record_id}}"
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      }
+    }
+  },
+  "0cd4e1a3-c0f0-458d-a892-2321d1d5dcb6": {
+    "op": "create_rule",
+    "body": {
+      "name": "byof persist contact_company create fields",
+      "model_id": "d2222d79-5985-4537-958e-ff3e120ba072",
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "actions": [
+        {
+          "data": {
+            "key": "{{after.key}}",
+            "version": "{{after.version}}"
+          },
+          "type": "update_record",
+          "trigger_rules": false,
+          "target_record_id": "{{record_id}}"
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      }
+    }
+  },
+  "ebb5f307-48dc-4d23-bacb-e73534d08e77": {
+    "op": "update_rule",
+    "body": {
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      },
+      "name": "Grant Company Permissions to Creator",
+      "description": "After an authenticated public form creates a Company, grant that app user full permission bits (15) with the can_* projections and the write-bit mirror (Kit-A, R-L). Kit-C: scope = subtree so the creator also reaches records others later add under it (PERM-08/15). settings.on_failure = abort makes the create fail if the grant cannot be written (PERM-03). Fix round 1: access_label is now stamped, so the creator row carries the same named level the sharing UI renders for every other grant. Full build Task 9 (Rob approved 2026-10-11): the trailing redirect action was removed because it fails ('Invalid redirect target') when the create comes from a BYOF service.",
+      "actions": [
+        {
+          "data": {
+            "scope": "subtree",
+            "source": "creator",
+            "user_id": {
+              "var": "actor.id"
+            },
+            "can_share": true,
+            "can_write": true,
+            "perm_bits": 15,
+            "can_delete": true,
+            "granted_at": {
+              "var": "time.utc_instant"
+            },
+            "granted_by": {
+              "var": "actor.id"
+            },
+            "access_label": "Manager - this record and everything under it",
+            "company_id": {
+              "var": "record_id"
+            },
+            "write_company_id": {
+              "var": "record_id"
+            }
+          },
+          "type": "create_record",
+          "trigger_rules": false,
+          "target_model_id": "122458df-732b-41b5-934d-907ac748f6d9"
+        }
+      ]
+    }
+  },
+  "4cbf62b3-14c7-422c-b674-f1805d217b26": {
+    "op": "update_rule",
+    "body": {
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      },
+      "name": "Grant Project Permissions to Creator",
+      "description": "After an authenticated public form creates a Project, grant that app user full permission bits (15) with the can_* projections and the write-bit mirror (Kit-A, R-L). Kit-C: scope = subtree (PERM-08/15). settings.on_failure = abort makes the create fail if the grant cannot be written (PERM-03). Owner stamping is in project: set key. Fix round 1: access_label is now stamped. Full build Task 9 (Rob approved 2026-10-11): the trailing redirect action was removed because it fails ('Invalid redirect target') when the create comes from a BYOF service.",
+      "actions": [
+        {
+          "data": {
+            "scope": "subtree",
+            "source": "creator",
+            "user_id": {
+              "var": "actor.id"
+            },
+            "can_share": true,
+            "can_write": true,
+            "perm_bits": 15,
+            "can_delete": true,
+            "granted_at": {
+              "var": "time.utc_instant"
+            },
+            "granted_by": {
+              "var": "actor.id"
+            },
+            "access_label": "Manager - this record and everything under it",
+            "project_id": {
+              "var": "record_id"
+            },
+            "write_project_id": {
+              "var": "record_id"
+            }
+          },
+          "type": "create_record",
+          "trigger_rules": false,
+          "target_model_id": "f61184d6-7f3d-4bc1-9bd6-fc9cbd35799a"
+        }
+      ]
+    }
+  },
+  "4207ac4d-6c95-406d-a508-ab1c22166e59": {
+    "op": "update_rule",
+    "body": {
+      "condition": {
+        "==": [
+          1,
+          1
+        ]
+      },
+      "trigger": "record_create",
+      "phase": "post_save",
+      "priority": 100,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {
+        "on_failure": "abort"
+      },
+      "name": "Grant Contact Permissions to Creator",
+      "description": "After an authenticated public form creates a Contact, grant that app user full permission bits (15) with the can_* projections and the write-bit mirror (Kit-A, R-L). Kit-C: scope = subtree (PERM-08/15). settings.on_failure = abort makes the create fail (422 rule_action_abort) if the grant cannot be written (PERM-03). Fix round 1: access_label is now stamped. Full build Task 9: the trailing redirect action was removed because it fails ('Invalid redirect target') when the create comes from a BYOF service.",
+      "actions": [
+        {
+          "data": {
+            "scope": "subtree",
+            "source": "creator",
+            "user_id": {
+              "var": "actor.id"
+            },
+            "can_share": true,
+            "can_write": true,
+            "perm_bits": 15,
+            "can_delete": true,
+            "granted_at": {
+              "var": "time.utc_instant"
+            },
+            "granted_by": {
+              "var": "actor.id"
+            },
+            "access_label": "Manager - this record and everything under it",
+            "contact_id": {
+              "var": "record_id"
+            },
+            "write_contact_id": {
+              "var": "record_id"
+            }
+          },
+          "type": "create_record",
+          "trigger_rules": false,
+          "target_model_id": "b7d39002-b2cf-43bc-8749-195e8f45021b"
+        }
+      ]
+    }
+  },
+  "06a76591-db82-4b53-8ed7-bc742770597e": {
+    "op": "create_rule",
+    "body": {
+      "model_id": "fa587fac-8787-42eb-b720-9b2cb2eb73f3",
+      "name": "note_file: copy blob id to storage key and checksum",
+      "condition": {
+        "!=": [
+          {
+            "var": "after.blob"
+          },
+          null
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_fields",
+          "fields": {
+            "storage_key": {
+              "var": "after.blob"
+            },
+            "checksum": {
+              "var": "after.blob"
+            }
+          }
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "pre_save",
+      "priority": 10,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {},
+      "isActive": true
+    }
+  },
+  "a7dd1096-2642-4936-810d-bd22b28646be": {
+    "op": "create_rule",
+    "body": {
+      "model_id": "fa587fac-8787-42eb-b720-9b2cb2eb73f3",
+      "name": "note_file: uploader must be able to write the note",
+      "condition": {
+        "!=": [
+          {
+            "var": "after.blob"
+          },
+          null
+        ]
+      },
+      "actions": [
+        {
+          "type": "require_query",
+          "saved_query_id": "fead71a9-3d52-4317-bfd6-1b2da48130d9",
+          "params": {
+            "template": {
+              "id": "{{after.note}}"
+            },
+            "message": "You cannot add attachments to this note"
+          },
+          "failure_status": 404
+        }
+      ],
+      "trigger": "record_create",
+      "phase": "pre_save",
+      "priority": 5,
+      "isActive": true,
+      "run_as": "actor",
+      "scope": {},
+      "settings": {}
+    }
+  }
+}

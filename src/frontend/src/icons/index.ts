@@ -1,0 +1,24 @@
+// Curated icon set: every SVG is compiled into the bundle by vite-plugin-svgr (no .svg lands in dist).
+export { ReactComponent as MenuIcon } from './menu.svg?react';
+export { ReactComponent as CloseIcon } from './close.svg?react';
+export { ReactComponent as SearchIcon } from './search.svg?react';
+export { ReactComponent as PlusIcon } from './plus.svg?react';
+export { ReactComponent as ChevronDownIcon } from './chevron-down.svg?react';
+export { ReactComponent as CalendarIcon } from './calendar.svg?react';
+export { ReactComponent as BriefcaseIcon } from './briefcase.svg?react';
+export { ReactComponent as BuildingIcon } from './building.svg?react';
+export { ReactComponent as UserIcon } from './user.svg?react';
+export { ReactComponent as UsersIcon } from './users.svg?react';
+export { ReactComponent as CheckSquareIcon } from './check-square.svg?react';
+export { ReactComponent as PhoneIcon } from './phone.svg?react';
+export { ReactComponent as NoteIcon } from './note.svg?react';
+export { ReactComponent as FileIcon } from './file.svg?react';
+export { ReactComponent as SettingsIcon } from './settings.svg?react';
+export { ReactComponent as LogoutIcon } from './logout.svg?react';
+export { ReactComponent as SunIcon } from './sun.svg?react';
+export { ReactComponent as MoonIcon } from './moon.svg?react';
+export { ReactComponent as AlertIcon } from './alert.svg?react';
+export { ReactComponent as CheckIcon } from './check.svg?react';
+export { ReactComponent as TrashIcon } from './trash.svg?react';
+export { ReactComponent as ShareIcon } from './share.svg?react';
+export { ReactComponent as EditIcon } from './edit.svg?react';

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Planner dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F5F2;color:#1F1E1B;font-family:'Public Sans',ui-sans-serif,system-ui,sans-serif}
+a{color:#4338CA;text-decoration:none}a:hover{color:#3730A3;text-decoration:underline}
+.nav a{color:#4A4744;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:14.5px;font-weight:500;min-height:44px;box-sizing:border-box}
+.nav a:hover{background:#ECEAE4;color:#1F1E1B;text-decoration:none}
+.nav a.on{background:#E6E4FB;color:#3730A3}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #CFCBC3;background:#fff;color:#1F1E1B;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{border-color:#8E8A83}
+.btn.primary{background:#4F46E5;border-color:#4F46E5;color:#fff}.btn.primary:hover{background:#4338CA}
+.btn:focus-visible,.nav a:focus-visible,a:focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:2px}
+.day{background:#fff;border:1px solid #E4E1DA;border-radius:10px;padding:10px 12px;min-height:150px;display:flex;flex-direction:column;gap:6px}
+.day.today{border-color:#4F46E5;box-shadow:0 0 0 2px rgba(79,70,229,.18)}
+.day.past{background:#FBFAF8}
+.ev{display:grid;grid-template-columns:16px 44px 1fr;gap:6px;align-items:baseline;font-size:12.5px;line-height:1.35;padding:3px 4px;border-radius:6px;color:#1F1E1B}
+.ev:hover{background:#F0EEE8;text-decoration:none}
+.ev .t{color:#5C5955;font-variant-numeric:tabular-nums}
+.ev .who{color:#5C5955}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#5C5955;font-weight:600;padding:10px 12px;border-bottom:1px solid #E4E1DA}
+td{padding:12px;border-bottom:1px solid #EEECE6;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:#ECEAE4;color:#4A4744}
+.pill.active{background:#E6E4FB;color:#3730A3}
+@media (max-width:760px){.shell{flex-direction:column}.side{width:100%!important}.grid7{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+</helmet>
+<div class="shell" style="display:flex;min-height:980px">
+  <aside class="side" style="width:232px;flex:none;padding:20px 16px;display:flex;flex-direction:column;gap:20px;border-right:1px solid #E4E1DA;background:#F6F5F2">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;color:#1F1E1B;font-weight:700;font-size:16px;padding:4px 8px">
+      <span style="width:28px;height:28px;border-radius:7px;background:#4F46E5;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">W</span>
+      WorkGetsDone
+    </a>
+    <nav class="nav" style="display:flex;flex-direction:column;gap:2px" aria-label="Main">
+      <a class="on" href="Main.dc.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7h12M6 1v4M10 1v4"/></svg>Dashboard</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 14V4l5-2v12M7 14V7l7-2v9M2 14h12"/></svg>Companies</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5.5" r="3"/><path d="M2.5 14c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg>Contacts</a>
+      <a href="A-Project.dc.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5h4l1.5 2H14v7H2z"/></svg>Projects</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5 8.2l2 2 4-4.4"/></svg>Tasks</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3.5l2.5-1 1.7 3.2-1.6 1.3a8 8 0 0 0 3.4 3.4l1.3-1.6 3.2 1.7-1 2.5C7.5 13.5 2.5 8.5 3 3.5z"/></svg>Calls</a>
+      <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h6l3 3v9H4z M5.5 8h5M5.5 11h5"/></svg>Notes</a>
+    </nav>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:2px" class="nav">
+      <a href="#"><span style="width:24px;height:24px;border-radius:50%;background:#D9D6CE;display:inline-block"></span>Rob Mero</a>
+      <a href="#">Sign out</a>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 560px;min-width:0;padding:28px 32px;display:flex;flex-direction:column;gap:28px">
+    <header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+      <div>
+        <h1 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-.01em">This fortnight</h1>
+        <p style="margin:6px 0 0;color:#5C5955;font-size:14px">Sunday, Oct 4 to Saturday, Oct 17 · calls and tasks you can see, ordered by start time</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" type="button"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v10M3 8h10"/></svg>New call</button>
+        <button class="btn primary" type="button"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v10M3 8h10"/></svg>New task</button>
+      </div>
+    </header>
+
+    <section aria-label="Two-week calendar" style="display:flex;flex-direction:column;gap:8px">
+      <div class="grid7" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#5C5955;font-weight:600;padding:0 4px">
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+      <div class="grid7" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px">
+        <sc-for list="{{days}}" as="d" hint-placeholder-count="14">
+          <div class="day {{d.cls}}">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:14px;font-weight:700">{{d.num}}</span>
+              <span style="font-size:11px;color:#5C5955">{{d.label}}</span>
+            </div>
+            <sc-for list="{{d.items}}" as="it" hint-placeholder-count="1">
+              <a class="ev" href="{{it.href}}">
+                <sc-if value="{{it.isCall}}" hint-placeholder-val="{{true}}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#4338CA" stroke-width="1.8"><path d="M3 3.5l2.5-1 1.7 3.2-1.6 1.3a8 8 0 0 0 3.4 3.4l1.3-1.6 3.2 1.7-1 2.5C7.5 13.5 2.5 8.5 3 3.5z"/></svg></sc-if>
+                <sc-if value="{{it.isTask}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#1F1E1B" stroke-width="1.8"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5 8.2l2 2 4-4.4"/></svg></sc-if>
+                <span class="t">{{it.time}}</span>
+                <span><span class="who">{{it.who}}</span> {{it.subject}}</span>
+              </a>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Projects" style="background:#fff;border:1px solid #E4E1DA;border-radius:10px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #E4E1DA;flex-wrap:wrap;gap:10px">
+        <h2 style="margin:0;font-size:16px;font-weight:700">Projects you can see</h2>
+        <a href="#" style="font-size:14px;font-weight:500">All projects</a>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Project</th><th>Company</th><th>Status</th><th class="num">Open tasks</th><th class="num">Open calls</th><th class="num">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><a href="A-Project.dc.html" style="font-weight:600">CRM migration</a></td><td>Northwind Traders</td><td><span class="pill active">Active</span></td><td class="num">4</td><td class="num">2</td><td class="num">11</td></tr>
+            <tr><td><a href="#" style="font-weight:600">Website redesign</a></td><td>Harbor &amp; Finch</td><td><span class="pill active">Active</span></td><td class="num">6</td><td class="num">1</td><td class="num">8</td></tr>
+            <tr><td><a href="#" style="font-weight:600">Quarterly filings automation</a></td><td>Pinecrest Accounting</td><td><span class="pill">Proposed</span></td><td class="num">1</td><td class="num">3</td><td class="num">2</td></tr>
+            <tr><td><a href="#" style="font-weight:600">Warehouse scanner rollout</a></td><td>Northwind Traders</td><td><span class="pill">On hold</span></td><td class="num">0</td><td class="num">0</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":980}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mk = (kind, time, who, subject) => ({ isCall: kind === 'call', isTask: kind === 'task', time, who, subject, href: kind === 'call' ? '#' : '#' });
+    const today = 8;
+    const first = [4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+    const labels = ['Oct','','','','Today','','','','','','','','',''];
+    const items = {
+      5: [mk('call','9:30','Dana Whitfield','Kickoff follow-up'), mk('task','14:00','','Export legacy contacts CSV')],
+      6: [mk('task','10:00','','Review scanner vendor quote')],
+      7: [mk('call','11:00','Priya Natarajan','Filing calendar scope')],
+      8: [mk('call','9:00','Marcus Bell','Homepage wireframe review'), mk('task','13:00','','Map legacy permissions to grants'), mk('call','16:30','Dana Whitfield','Data cut sign-off')],
+      9: [mk('task','9:00','','Draft migration runbook')],
+      12: [mk('call','10:30','Lena Okafor','Contract renewal')],
+      13: [mk('task','15:00','','Load test import script')],
+      15: [mk('call','14:00','Marcus Bell','Design handoff'), mk('task','17:00','','Send October invoice')],
+      16: [mk('task','11:00','','Archive on-hold project notes')]
+    };
+    const days = first.map((num, i) => ({
+      num, label: labels[i], items: items[num] || [],
+      cls: num === today ? 'today' : (num < today ? 'past' : '')
+    }));
+    return { days };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss";
+@import "./tokens.css";
+@import "@fullcalendar/react/skeleton.css" layer(components);
+@import "@fullcalendar/react/themes/classic/theme.css" layer(components);
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Everything else is Tailwind utilities on the components. What stays here is what a utility cannot express. */
+@layer base {
+  body { margin: 0; }
+  /* Safety net: any interactive element a component forgot to ring still shows a visible keyboard focus. Component utilities override it. */
+  a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible, input[type=checkbox]:focus-visible { outline: 2px solid color-mix(in srgb, var(--color-brand-500) 60%, transparent); outline-offset: 2px; }
+  button, a, input, textarea, select { touch-action: manipulation; }
+  button:disabled { cursor: not-allowed; }
+}
+html.dark { color-scheme: dark; }
+
+/* FullCalendar 7 classic theme: the palette stylesheet is replaced by our tokens, light here and dark under html.dark. */
+.calendar-grid {
+  --fc-classic-button: var(--color-white);
+  --fc-classic-button-border: var(--color-gray-300);
+  --fc-classic-button-strong: var(--color-gray-100);
+  --fc-classic-button-strong-border: var(--color-gray-400);
+  --fc-classic-button-outline: color-mix(in srgb, var(--color-brand-500) 50%, transparent);
+  --fc-classic-button-foreground: var(--color-gray-700);
+  --fc-classic-primary: var(--color-brand-500);
+  --fc-classic-primary-foreground: var(--color-white);
+  --fc-classic-event: var(--color-brand-500);
+  --fc-classic-event-contrast: var(--color-white);
+  --fc-classic-background-event: var(--color-success-500);
+  --fc-classic-background-event-opacity: 15%;
+  --fc-classic-background-event-foreground-opacity: 50%;
+  --fc-classic-highlight: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+  --fc-classic-today: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
+  --fc-classic-now: var(--color-error-500);
+  --fc-classic-small-dot-width: 8px;
+  --fc-classic-large-dot-width: 10px;
+  --fc-classic-background: var(--color-white);
+  --fc-classic-faint: var(--color-gray-50);
+  --fc-classic-muted: var(--color-gray-100);
+  --fc-classic-strong: var(--color-gray-200);
+  --fc-classic-foreground: var(--color-gray-800);
+  --fc-classic-faint-foreground: var(--color-gray-400);
+  --fc-classic-muted-foreground: var(--color-gray-500);
+  --fc-classic-border: var(--color-gray-200);
+  --fc-classic-strong-border: var(--color-gray-300);
+  font-family: inherit;
+}
+html.dark .calendar-grid {
+  --fc-classic-button: var(--color-gray-dark);
+  --fc-classic-button-border: var(--color-gray-700);
+  --fc-classic-button-strong: var(--color-gray-800);
+  --fc-classic-button-strong-border: var(--color-gray-600);
+  --fc-classic-button-foreground: var(--color-gray-200);
+  --fc-classic-highlight: color-mix(in srgb, var(--color-brand-500) 20%, transparent);
+  --fc-classic-today: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+  --fc-classic-background: var(--color-gray-dark);
+  --fc-classic-faint: color-mix(in srgb, var(--color-white) 3%, transparent);
+  --fc-classic-muted: color-mix(in srgb, var(--color-white) 6%, transparent);
+  --fc-classic-strong: color-mix(in srgb, var(--color-white) 12%, transparent);
+  --fc-classic-foreground: var(--color-gray-100);
+  --fc-classic-faint-foreground: var(--color-gray-600);
+  --fc-classic-muted-foreground: var(--color-gray-400);
+  --fc-classic-border: var(--color-gray-800);
+  --fc-classic-strong-border: var(--color-gray-700);
+}

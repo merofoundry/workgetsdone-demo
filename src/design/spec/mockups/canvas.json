@@ -1,0 +1,25 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-08T03:05:00Z"},
+  "title": "WorkGetsDone front-end directions",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 980, "title": "A · Planner — Dashboard", "expand": "fill"},
+    "A-Project.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 1120, "title": "A · Planner — Project", "expand": "fill"},
+    "B-Dashboard.dc.html": {"x": 0, "y": 1360, "w": 1280, "h": 980, "title": "B · Workbench — Dashboard", "expand": "fill"},
+    "B-Project.dc.html": {"x": 1360, "y": 1360, "w": 1280, "h": 1120, "title": "B · Workbench — Project", "expand": "fill"},
+    "C-Dashboard.dc.html": {"x": 0, "y": 2720, "w": 1280, "h": 980, "title": "C · Console — Dashboard", "expand": "fill"},
+    "C-Project.dc.html": {"x": 1360, "y": 2720, "w": 1280, "h": 1120, "title": "C · Console — Project", "expand": "fill"},
+    "D-Dashboard.dc.html": {"x": 0, "y": 4080, "w": 1280, "h": 980, "title": "D · Chosen — Dashboard", "expand": "fill"},
+    "D-Project.dc.html": {"x": 1360, "y": 4080, "w": 1280, "h": 1120, "title": "D · Chosen — Project", "expand": "fill"}
+  },
+  "order": ["Main.dc.html", "A-Project.dc.html", "B-Dashboard.dc.html", "B-Project.dc.html", "C-Dashboard.dc.html", "C-Project.dc.html", "D-Dashboard.dc.html", "D-Project.dc.html"],
+  "notes": {
+    "rowD": {"x": 0, "y": 3780, "text": "D · Chosen — Console layout in the Planner palette: warm paper, indigo", "kind": "title1", "maxW": 2640},
+    "rowA": {"x": 0, "y": -300, "text": "A · Planner — calendar-first, warm paper, the existing indigo accent", "kind": "title1", "maxW": 2640},
+    "rowB": {"x": 0, "y": 1060, "text": "B · Workbench — project rail + detail, agenda instead of a grid, teal accent", "kind": "title1", "maxW": 2640},
+    "rowC": {"x": 0, "y": 2420, "text": "C · Console — dense dark chrome, timeline detail, amber accent", "kind": "title1", "maxW": 2640}
+  },
+  "designSystems": []
+}

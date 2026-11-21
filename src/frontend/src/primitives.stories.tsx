@@ -1,0 +1,11 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button, Dialog, EmptyState, ErrorState, Field, LoadingState, Marker, Panel, Tag } from './primitives';
+const meta: Meta = { title: 'Primitives/States' }; export default meta;
+type Story = StoryObj;
+export const Buttons: Story = { render: () => <div className="actions"><Button>Secondary</Button><Button variant="primary" hint="T">New task</Button><Button variant="danger">Archive</Button><Button disabled>Disabled</Button><Button busy>Saving</Button></div> };
+export const TagsAndMarkers: Story = { render: () => <div className="actions"><Tag variant="active">Active</Tag><Tag variant="billable">Billable</Tag><Tag variant="late">Late</Tag><Tag variant="proposed">Proposed</Tag>{(['task','call','note','file'] as const).map(kind => <span key={kind}><Marker kind={kind} /> {kind}</span>)}</div> };
+export const Fields: Story = { render: () => <div className="form-stack"><Field label="Task name"><input defaultValue="Check the import" /></Field><Field label="Invalid date" error="Choose a date."><input type="date" aria-invalid="true" /></Field><Field label="Disabled"><input disabled value="Not editable" readOnly /></Field></div> };
+export const Loading: Story = { render: () => <Panel title="Agenda"><LoadingState rows={4} /></Panel> };
+export const Empty: Story = { render: () => <Panel title="Agenda"><EmptyState action={<Button>New task</Button>}>Nothing scheduled today.</EmptyState></Panel> };
+export const Error: Story = { render: () => <Panel title="Agenda"><ErrorState retry={() => {}} /></Panel> };
+export const Modal: Story = { render: () => <Dialog title="New note" close={() => {}} footer={<Button variant="primary">Save note</Button>}><Field label="Description"><input autoFocus /></Field></Dialog> };

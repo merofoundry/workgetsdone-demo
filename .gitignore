@@ -1,0 +1,9 @@
+.env-*
+*.session.json
+node_modules/
+dist/
+site.zip
+storybook-static/
+test-results/
+playwright-report/
+*.tsbuildinfo
