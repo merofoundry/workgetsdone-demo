@@ -35,6 +35,7 @@ export function SignIn() {
               </dl>
               <Button type="button" size="sm" onClick={() => { setEmail(account.email); setPassword(account.password); }}>Use {account.name}'s login</Button>
             </div>)}
+            <p className={mutedText}>Source code is available at <a className={linkClass} href="https://github.com/merofoundry/workgetsdone-demo" rel="noopener">github.com/merofoundry/workgetsdone-demo</a></p>
           </section>
           {google.data && <div className="federated flex flex-col gap-3 border-t border-gray-200 pt-5 dark:border-gray-800"><a className={`button inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-gray-700 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 ${focusRing} dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-white/5`} href={google.data}>Continue with Google</a><p className={mutedText}>Google sign-in works for accounts an administrator has linked. It does not create accounts.</p></div>}
         </section>
