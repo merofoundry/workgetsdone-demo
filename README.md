@@ -12,9 +12,12 @@ https://workgetsdone.staging.merofoundry.app and its data resets every hour.
 
 ## What is not here
 
-This is a copy of the application source taken from a private working repository. Build
-logs, verification evidence, deployment runbooks and the original legacy application were
-left out.
+Build logs, verification evidence, deployment runbooks and the original legacy application
+were left out.
 
 Scripts under `src/frontend/scripts/` that sign in or deploy read their credentials from
 local `.env-*` files, which are not part of this repository.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
