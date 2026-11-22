@@ -18,6 +18,15 @@ were left out.
 Scripts under `src/frontend/scripts/` that sign in or deploy read their credentials from
 local `.env-*` files, which are not part of this repository.
 
+## Prompts
+
+The prompts typed in the MeroFoundry tutorial videos are in [`prompts/`](prompts/README.md), one file per tutorial:
+
+- Tutorial 02: [Build Your First App Table With One Prompt](prompts/02-build-a-table.md)
+- Tutorial 03: [Link Your CRM Tables With One Prompt](prompts/03-link-crm-tables.md)
+
+Tutorial 01 (Connect Your AI) has no build prompt. Later tutorials are listed in [`prompts/README.md`](prompts/README.md) as their videos go live.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
